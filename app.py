@@ -5,6 +5,7 @@ from database import db
 from routes.HomeRoute import home_bp
 from models.UserModel import User
 from werkzeug.security import generate_password_hash
+from routes.LoginRoute import login_bp, init_jwt
 
 app = configure_app(Flask(__name__))
 db.init_app(app)
@@ -23,12 +24,21 @@ with app.app_context():
         print(f"Usuário admin: '{admin_username}'")
     else:
         hashed_password = generate_password_hash(admin_password)
-        admin = User(username=admin_username, password=hashed_password, roles=["ADMIN", "USUARIO", "INQUILINO", "PROPRIETARIO"])
+        admin = User(
+            username=admin_username,
+            password=hashed_password,
+            roles=["ADMIN", "USUARIO", "INQUILINO", "PROPRIETARIO"]
+        )
         db.session.add(admin)
         db.session.commit()
         print(f"Usuário admin '{admin_username}' criado com sucesso.")
 
+# 🔑 Inicializa o JWT aqui
+init_jwt(app)
+
+# Registra os blueprints
 app.register_blueprint(home_bp)
+app.register_blueprint(login_bp)
 
 if __name__ == '__main__':
     app.run()
