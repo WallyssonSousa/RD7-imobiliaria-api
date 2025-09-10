@@ -9,6 +9,7 @@ from routes.LoginRoute import login_bp, init_jwt
 
 app = configure_app(Flask(__name__))
 db.init_app(app)
+init_jwt(app)#JWT está começando aqui 
 
 with app.app_context():
     db.create_all()
@@ -33,8 +34,7 @@ with app.app_context():
         db.session.commit()
         print(f"Usuário admin '{admin_username}' criado com sucesso.")
 
-# 🔑 Inicializa o JWT aqui
-init_jwt(app)
+
 
 # Registra os blueprints
 app.register_blueprint(home_bp)
