@@ -26,6 +26,6 @@ def login():
         role = "admin"
         token = create_access_token(identity={"username": username, "role": "admin"})
         return jsonify({"mensagem": "Login realizado com sucesso", "token": token, "role": role}), 200
-
+    
     return jsonify({"erro": "Credenciais inválidas"}), 401
 
