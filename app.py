@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask 
 from config import configure_app
 from database import db
 from routes.HomeRoute import home_bp
@@ -33,8 +33,6 @@ with app.app_context():
         db.session.add(admin)
         db.session.commit()
         print(f"Usuário admin '{admin_username}' criado com sucesso.")
-
-
 
 # Registra os blueprints
 app.register_blueprint(home_bp)
