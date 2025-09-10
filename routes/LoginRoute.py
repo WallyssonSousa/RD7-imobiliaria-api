@@ -23,8 +23,9 @@ def login():
     password = dados.get("password")
 
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        role = "admin"
         token = create_access_token(identity={"username": username, "role": "admin"})
-        return jsonify({"mensagem": "Login realizado com sucesso", "token": token}), 200
+        return jsonify({"mensagem": "Login realizado com sucesso", "token": token, "role": role}), 200
 
     return jsonify({"erro": "Credenciais inválidas"}), 401
 
