@@ -15,7 +15,7 @@ class Imovel(db.Model):
     estado = db.Column(db.String(2))
     complemento = db.Column(db.String(255))
 
-    metragem = db.Column(db.String(50))
+    metragem = db.Column(db.String(50), nullable=False)
     quartos = db.Column(db.Integer)
     suites = db.Column(db.Integer)
     banheiros = db.Column(db.Integer)
@@ -24,7 +24,7 @@ class Imovel(db.Model):
     valor_aluguel = db.Column(db.Numeric(10,2))
     valor_venda = db.Column(db.Numeric(12,2))
     condominio = db.Column(db.Numeric(10,2))
-    iptu = db.Column(db.Numeric(10,2))
+    iptu = db.Column(db.Numeric(10,2), nullable=False)
 
     finalidade = db.Column(Enum("ALUGUEL", "COMPRA", "AMBOS", name="finalidade_enum"), nullable=False, default="AMBOS")
     disponivel = db.Column(db.Boolean, default=True)

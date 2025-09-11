@@ -19,15 +19,18 @@ def buscar_endereco_por_cep(cep):
         return None
     return None
 
-
 @imovel_bp.route("/imoveis", methods=["POST"])
 @jwt_required()
 def criar_imovel():
     dados = request.get_json()
 
+    # Lista de campos obrigatórios
+    campos_obrigatorios = ["cep", "tipo_imovel", "metragem", "valor_aluguel", "valor_venda", "iptu", "finalidade"]
+    campos_faltando = [campo for campo in campos_obrigatorios if not dados.get(campo)]
+    if campos_faltando:
+        return jsonify({"erro": "Campos obrigatórios faltando", "campos": campos_faltando}), 400
+
     cep = dados.get("cep")
-    if not cep:
-        return jsonify({"erro": "O campo 'cep' é obrigatório"}), 400
 
     # Busca endereço no ViaCEP
     endereco = buscar_endereco_por_cep(cep)
@@ -36,7 +39,7 @@ def criar_imovel():
 
     # Cria objeto Imovel
     imovel = Imovel(
-        tipo_imovel=dados.get("tipo_imovel", "CASA"),
+        tipo_imovel=dados.get("tipo_imovel"),
         cep=cep,
         logradouro=endereco.get("logradouro"),
         bairro=endereco.get("bairro"),
@@ -55,7 +58,7 @@ def criar_imovel():
         condominio=dados.get("condominio"),
         iptu=dados.get("iptu"),
 
-        finalidade=dados.get("finalidade", "AMBOS"),
+        finalidade=dados.get("finalidade"),
         disponivel=dados.get("disponivel", True),
 
         mobilia=dados.get("mobilia", "VAZIO"),
