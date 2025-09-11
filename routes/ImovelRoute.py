@@ -19,41 +19,65 @@ def buscar_endereco_por_cep(cep):
         return None
     return None
 
+
 @imovel_bp.route("/imoveis", methods=["POST"])
-@jwt_required()  # só usuário autenticado pode cadastrar
+@jwt_required()
 def criar_imovel():
     dados = request.get_json()
 
     cep = dados.get("cep")
-    observacoes = dados.get("observacoes", "")
-
     if not cep:
         return jsonify({"erro": "O campo 'cep' é obrigatório"}), 400
 
-    # Busca endereço pelo CEP
+    # Busca endereço no ViaCEP
     endereco = buscar_endereco_por_cep(cep)
     if not endereco:
         return jsonify({"erro": "CEP inválido ou não encontrado"}), 400
 
-    # Cria novo imóvel
+    # Cria objeto Imovel
     imovel = Imovel(
+        tipo_imovel=dados.get("tipo_imovel", "CASA"),
         cep=cep,
         logradouro=endereco.get("logradouro"),
         bairro=endereco.get("bairro"),
         cidade=endereco.get("localidade"),
         estado=endereco.get("uf"),
-        observacoes=observacoes
+        complemento=dados.get("complemento"),
+
+        metragem=dados.get("metragem"),
+        quartos=dados.get("quartos"),
+        suites=dados.get("suites"),
+        banheiros=dados.get("banheiros"),
+        vagas=dados.get("vagas"),
+
+        valor_aluguel=dados.get("valor_aluguel"),
+        valor_venda=dados.get("valor_venda"),
+        condominio=dados.get("condominio"),
+        iptu=dados.get("iptu"),
+
+        finalidade=dados.get("finalidade", "AMBOS"),
+        disponivel=dados.get("disponivel", True),
+
+        mobilia=dados.get("mobilia", "VAZIO"),
+        observacoes=dados.get("observacoes")
     )
 
+    # Salvar no banco
     db.session.add(imovel)
     db.session.commit()
 
     return jsonify({
-        "id": imovel.id,
-        "cep": imovel.cep,
-        "logradouro": imovel.logradouro,
-        "bairro": imovel.bairro,
-        "cidade": imovel.cidade,
-        "estado": imovel.estado,
-        "observacoes": imovel.observacoes
+        "mensagem": "Imóvel criado com sucesso!",
+        "imovel": {
+            "id": imovel.id,
+            "tipo_imovel": imovel.tipo_imovel,
+            "cep": imovel.cep,
+            "logradouro": imovel.logradouro,
+            "bairro": imovel.bairro,
+            "cidade": imovel.cidade,
+            "estado": imovel.estado,
+            "finalidade": imovel.finalidade,
+            "mobilia": imovel.mobilia,
+            "observacoes": imovel.observacoes
+        }
     }), 201
