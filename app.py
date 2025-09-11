@@ -3,6 +3,7 @@ from flask import Flask
 from config import configure_app
 from database import db
 from routes.HomeRoute import home_bp
+from routes.ImovelRoute import imovel_bp
 from models.UserModel import User
 from werkzeug.security import generate_password_hash
 from routes.LoginRoute import login_bp, init_jwt
@@ -37,6 +38,7 @@ with app.app_context():
 # Registra os blueprints
 app.register_blueprint(home_bp)
 app.register_blueprint(login_bp)
+app.register_blueprint(imovel_bp)
 
 if __name__ == '__main__':
     app.run()

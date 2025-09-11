@@ -1,8 +1,7 @@
 from flask import Blueprint, request, jsonify
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from flask_jwt_extended import create_access_token, JWTManager
 import os
 from datetime import timedelta
-from flask_jwt_extended import JWTManager
 
 login_bp = Blueprint("login", __name__)
 
@@ -15,7 +14,6 @@ def init_jwt(app):
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
     JWTManager(app)
     
-
 @login_bp.route("/login", methods=["POST"])
 def login():
     dados = request.get_json()
@@ -24,8 +22,11 @@ def login():
 
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
         role = "admin"
-        token = create_access_token(identity={"username": username, "role": "admin"})
+        # identity deve ser string ou int; dados extras vão em additional_claims
+        token = create_access_token(
+            identity=username,
+            additional_claims={"role": role}
+        )
         return jsonify({"mensagem": "Login realizado com sucesso", "token": token, "role": role}), 200
     
     return jsonify({"erro": "Credenciais inválidas"}), 401
-
