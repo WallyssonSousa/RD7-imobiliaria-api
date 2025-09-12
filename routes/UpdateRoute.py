@@ -1,10 +1,9 @@
-from flask import Blueprint, request, jsonify
+from flask import request, jsonify
 from database import db
 from routes.ImovelRoute import buscar_endereco_por_cep
 from routes.ImovelRoute import imovel_bp
 from models.ImovelModel import Imovel
 from flask_jwt_extended import jwt_required
-import requests
 
 @imovel_bp.route("/imoveis/<int:id>", methods=["PUT"])
 @jwt_required()

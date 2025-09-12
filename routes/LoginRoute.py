@@ -11,7 +11,7 @@ JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "defaultsecret")
 
 def init_jwt(app):
     app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
-    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+    app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1) # tokem dura por uma hora
     JWTManager(app)
     
 @login_bp.route("/login", methods=["POST"])

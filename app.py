@@ -3,6 +3,7 @@ from flask import Flask
 from config import configure_app
 from database import db
 from routes.HomeRoute import home_bp
+from routes.GetImoveis import imovel_bp
 from routes.LoginRoute import login_bp, init_jwt
 from routes.ImovelRoute import imovel_bp
 from routes.UpdateRoute import imovel_bp #importando o Blueprint de UpdateRoute
