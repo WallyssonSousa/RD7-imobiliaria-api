@@ -2,12 +2,13 @@ import os
 from flask import Flask 
 from config import configure_app
 from database import db
-from routes.HomeRoute import home_bp
-from routes.GetImoveis import imovel_bp
-from routes.LoginRoute import login_bp, init_jwt
+from routes.HomeRoute import home_bp # import do HOME
+from routes.LoginRoute import login_bp, init_jwt # Import do LOGIN
+from routes import GetImoveis
+from routes import PostImoveisRoute
+from routes import UpdateImoveisRoute
+from routes import DeleteImoveisRoute
 from routes.ImovelRoute import imovel_bp
-from routes.UpdateRoute import imovel_bp #importando o Blueprint de UpdateRoute
-from routes.DeleteImoveisRoute import imovel_bp
 from models.UserModel import User
 from werkzeug.security import generate_password_hash
 
