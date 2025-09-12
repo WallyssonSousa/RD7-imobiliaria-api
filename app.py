@@ -3,10 +3,11 @@ from flask import Flask
 from config import configure_app
 from database import db
 from routes.HomeRoute import home_bp
+from routes.LoginRoute import login_bp, init_jwt
 from routes.ImovelRoute import imovel_bp
+from routes.UpdateRoute import imovel_bp #importando o Blueprint de UpdateRoute
 from models.UserModel import User
 from werkzeug.security import generate_password_hash
-from routes.LoginRoute import login_bp, init_jwt
 
 app = configure_app(Flask(__name__))
 db.init_app(app)
