@@ -7,6 +7,7 @@ from routes.GetImoveis import imovel_bp
 from routes.LoginRoute import login_bp, init_jwt
 from routes.ImovelRoute import imovel_bp
 from routes.UpdateRoute import imovel_bp #importando o Blueprint de UpdateRoute
+from routes.DeleteImoveisRoute import imovel_bp
 from models.UserModel import User
 from werkzeug.security import generate_password_hash
 

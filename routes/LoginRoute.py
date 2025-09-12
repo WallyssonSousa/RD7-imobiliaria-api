@@ -9,6 +9,7 @@ ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin123")
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "defaultsecret")
 
+# Criação do JWT
 def init_jwt(app):
     app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1) # tokem dura por uma hora
@@ -22,7 +23,6 @@ def login():
 
     if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
         role = "admin"
-        # identity deve ser string ou int; dados extras vão em additional_claims
         token = create_access_token(
             identity=username,
             additional_claims={"role": role}
