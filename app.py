@@ -5,6 +5,7 @@ from database import db
 from routes.HomeRoute import home_bp # import do HOME
 from routes.LoginRoute import login_bp, init_jwt # Import do LOGIN
 from routes.CadastroClienteRoute import cadastro_bp
+from routes.LoginClienteRoute import login_cliente_bp
 from routes import GetImoveis
 from routes import PostImoveisRoute
 from routes import UpdateImoveisRoute
@@ -13,10 +14,15 @@ from routes.ImovelRoute import imovel_bp
 from models.UserModel import User
 from models.ClienteModel import Cliente
 from werkzeug.security import generate_password_hash
+from flask_jwt_extended import JWTManager
 
 app = configure_app(Flask(__name__))
 db.init_app(app)
-init_jwt(app)#JWT está começando aqui 
+from flask_jwt_extended import JWTManager
+
+# Configura JWT com uma chave secreta
+app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY") or "chave-super-secreta"
+jwt = JWTManager(app) 
 
 with app.app_context():
     db.create_all()
@@ -46,6 +52,7 @@ app.register_blueprint(home_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(imovel_bp)
 app.register_blueprint(cadastro_bp)
+app.register_blueprint(login_cliente_bp)
 
 if __name__ == '__main__':
     app.run()
