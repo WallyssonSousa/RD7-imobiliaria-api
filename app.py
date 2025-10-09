@@ -4,12 +4,14 @@ from config import configure_app
 from database import db
 from routes.HomeRoute import home_bp # import do HOME
 from routes.LoginRoute import login_bp, init_jwt # Import do LOGIN
+from routes.CadastroClienteRoute import cadastro_bp
 from routes import GetImoveis
 from routes import PostImoveisRoute
 from routes import UpdateImoveisRoute
 from routes import DeleteImoveisRoute
 from routes.ImovelRoute import imovel_bp
 from models.UserModel import User
+from models.ClienteModel import Cliente
 from werkzeug.security import generate_password_hash
 
 app = configure_app(Flask(__name__))
@@ -43,6 +45,7 @@ with app.app_context():
 app.register_blueprint(home_bp)
 app.register_blueprint(login_bp)
 app.register_blueprint(imovel_bp)
+app.register_blueprint(cadastro_bp)
 
 if __name__ == '__main__':
     app.run()
