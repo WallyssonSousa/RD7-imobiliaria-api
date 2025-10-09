@@ -39,3 +39,17 @@ def cadastrar_cliente():
             "email": novo_cliente.email
         }
     }), 201
+
+@cadastro_bp.route('/clientes', methods=['GET'])
+def listar_clientes():
+    clientes = Cliente.query.all()
+    lista = [
+        {
+            "id": cliente.id,
+            "nome": cliente.nome,
+            "email": cliente.email,
+            "criado_em": cliente.criado_em.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        for cliente in clientes
+    ]
+    return jsonify(lista), 200
