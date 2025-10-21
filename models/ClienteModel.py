@@ -11,11 +11,12 @@ class Cliente(db.Model):
     senha_hash = db.Column(db.String(255), nullable=False)
     criado_em = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Métodos utilitários
+    funcionario = db.relationship('Funcionario', back_populates='cliente', uselist=False)
+    inquilino = db.relationship('Inquilino', back_populates='cliente', uselist=False)
+    proprietario = db.relationship('Proprietario', back_populates='cliente', uselist=False)
+
     def set_senha(self, senha):
-        """Gera hash seguro para a senha antes de salvar no banco."""
         self.senha_hash = generate_password_hash(senha)
 
     def verificar_senha(self, senha):
-        """Verifica se a senha informada confere com o hash."""
         return check_password_hash(self.senha_hash, senha)

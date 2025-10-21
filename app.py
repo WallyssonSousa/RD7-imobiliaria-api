@@ -10,9 +10,16 @@ from routes import GetImoveis
 from routes import PostImoveisRoute
 from routes import UpdateImoveisRoute
 from routes import DeleteImoveisRoute
+from routes.Atribuir_Funcao import admin_bp
+from routes.GetUsers import users_bp
+from routes.GetCliente import clientes_bp
 from routes.ImovelRoute import imovel_bp
+from routes.GetClienteById import cliente_bp
 from models.UserModel import User
 from models.ClienteModel import Cliente
+from models.FuncionarioModel import Funcionario
+from models.InquilinoModel import Inquilino
+from models.ProprietarioModel import Proprietario
 from werkzeug.security import generate_password_hash
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS  
@@ -42,7 +49,8 @@ with app.app_context():
         hashed_password = generate_password_hash(admin_password)
         admin = User(
             username=admin_username,
-            password=hashed_password,
+            email="admin@imobiliaria.com",
+            password_hash=hashed_password,
             roles=["ADMIN", "USUARIO", "INQUILINO", "PROPRIETARIO"]
         )
         db.session.add(admin)
@@ -55,6 +63,10 @@ app.register_blueprint(login_bp)
 app.register_blueprint(imovel_bp)
 app.register_blueprint(cadastro_bp)
 app.register_blueprint(login_cliente_bp)
+app.register_blueprint(admin_bp)
+app.register_blueprint(users_bp)
+app.register_blueprint(clientes_bp)
+app.register_blueprint(cliente_bp)
 
 if __name__ == '__main__':
     app.run()
