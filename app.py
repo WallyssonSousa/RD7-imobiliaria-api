@@ -1,13 +1,37 @@
 import os
-from flask import Flask
+from flask import Flask 
 from config import configure_app
 from database import db
-from routes.HomeRoute import home_bp
+from routes.HomeRoute import home_bp # import do HOME
+from routes.LoginRoute import login_bp, init_jwt # Import do LOGIN
+from routes.CadastroClienteRoute import cadastro_bp
+from routes.LoginClienteRoute import login_cliente_bp
+from routes import GetImoveis
+from routes import PostImoveisRoute
+from routes import UpdateImoveisRoute
+from routes import DeleteImoveisRoute
+from routes.Atribuir_Funcao import admin_bp
+from routes.GetUsers import users_bp
+from routes.GetCliente import clientes_bp
+from routes.ImovelRoute import imovel_bp
+from routes.GetClienteById import cliente_bp
 from models.UserModel import User
+from models.ClienteModel import Cliente
+from models.FuncionarioModel import Funcionario
+from models.InquilinoModel import Inquilino
+from models.ProprietarioModel import Proprietario
 from werkzeug.security import generate_password_hash
+from flask_jwt_extended import JWTManager
+from flask_cors import CORS  
+from flask_jwt_extended import JWTManager
 
 app = configure_app(Flask(__name__))
 db.init_app(app)
+CORS(app, resources={r"/*": {"origins": "*"}}) 
+
+# Configura JWT com uma chave secreta
+app.config['JWT_SECRET_KEY'] = os.getenv("JWT_SECRET_KEY") or "chave-super-secreta"
+jwt = JWTManager(app) 
 
 with app.app_context():
     db.create_all()
@@ -23,12 +47,26 @@ with app.app_context():
         print(f"Usuário admin: '{admin_username}'")
     else:
         hashed_password = generate_password_hash(admin_password)
-        admin = User(username=admin_username, password=hashed_password, roles=["ADMIN", "USUARIO", "INQUILINO", "PROPRIETARIO"])
+        admin = User(
+            username=admin_username,
+            email="admin@imobiliaria.com",
+            password_hash=hashed_password,
+            roles=["ADMIN", "USUARIO", "INQUILINO", "PROPRIETARIO"]
+        )
         db.session.add(admin)
         db.session.commit()
         print(f"Usuário admin '{admin_username}' criado com sucesso.")
 
+# Registra os blueprints
 app.register_blueprint(home_bp)
+app.register_blueprint(login_bp)
+app.register_blueprint(imovel_bp)
+app.register_blueprint(cadastro_bp)
+app.register_blueprint(login_cliente_bp)
+app.register_blueprint(admin_bp)
+app.register_blueprint(users_bp)
+app.register_blueprint(clientes_bp)
+app.register_blueprint(cliente_bp)
 
 if __name__ == '__main__':
     app.run()
